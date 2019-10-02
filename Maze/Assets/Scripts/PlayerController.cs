@@ -1,49 +1,77 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// TODO: 
-// To create enemy character, we can create an abstract class Character
-// and let PlayerController and EnemyController implements Character class
+
+
+// Development List
+// Attack Button Improvement
+// Enemy Creation
+
+public enum ActionState
+{
+    Idle,
+    Walk,
+    Attack,
+}
+
 public class PlayerController : MonoBehaviour
 {
     CharacterController characterController;
-    Animation animation;
+    Animator animator;
     public float walkSpeed = 6.0F;
     public float runSpeed = 10.0F;
     // public float jumpSpeed = 8.0F;
     // public float gravity = 20.0F;
     public VariableJoystick joystick;
     public int dir = 0;
+    public ActionState state;
     Vector3 cameraOffset;
+    public bool isAttack = false;
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        animation = GetComponent<Animation>();
+        animator = GetComponent<Animator>();
         joystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
+        state = ActionState.Idle;
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
     }
-
-    // TODO: Add the other 4 directions.
-    // Update is called once per frame
     void Update()
-    {
-        this.move();
+    {　
+        // TODO: Do we really need ActionState?
+        Vector3 movement = Vector3.forward * joystick.Vertical + Vector3.right * joystick.Horizontal;
+        if (isAttack) {
+            state = ActionState.Attack;
+        } else {
+            if (movement != Vector3.zero) {
+                state = ActionState.Walk;
+            } else {
+                state = ActionState.Idle;
+            }
+        }
+
+        switch (state)
+        {
+            case (ActionState.Walk):
+                move(movement);
+                break;
+            case (ActionState.Attack):
+                attack();
+                break;
+            default:
+                animator.SetBool("isWalk", false);
+                break;
+        }
     }
 
-    void move() {
-        // movement.y -= gravity * Time.deltaTime;
-        // print (joystick.Direction);
-        Vector3 movement = Vector3.forward * joystick.Vertical + Vector3.right * joystick.Horizontal;
-        if (movement != Vector3.zero)
-        {
-            animation.Play("walk_00");
-            characterController.Move(movement * runSpeed * Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
-            Camera.main.transform.position = transform.position + this.cameraOffset;
-        }
-        else
-        {
-            animation.Play();
-        }
+    void move(Vector3 movement) {
+        animator.SetBool("isWalk", true);
+        characterController.Move(movement * runSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
+        Camera.main.transform.position = transform.position + this.cameraOffset;
+    }
+
+    public void attack() {
+        animator.SetTrigger("attack");
+        isAttack = false;
     }
 }
