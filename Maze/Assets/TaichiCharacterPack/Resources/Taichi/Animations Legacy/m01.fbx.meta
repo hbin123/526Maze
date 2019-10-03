@@ -1084,6 +1084,9 @@ ModelImporter:
       4: 400358
     second: u_lip_center
   - first:
+      95: 9500000
+    second: //RootNode
+  - first:
       111: 11100000
     second: //RootNode
   externalObjects: {}
