@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 // Development List
@@ -27,7 +28,9 @@ public class PlayerController : MonoBehaviour
     public ActionState state;
     Vector3 cameraOffset;
     public bool isAttack = false;
+
     public int hp = 100;
+    
 
     void Start()
     {
@@ -86,5 +89,21 @@ public class PlayerController : MonoBehaviour
     {
         this.hp -= toLose;
         // need to do failure check
+        if(this.hp <= 0)
+        {
+            GameManager.instance.LoseGame();
+        }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+
+        Debug.Log("collider name: " + hit.collider.name);
+        if (hit.collider.tag != "Ground")
+        {
+            this.loseHP(30);
+        }
+
+        Debug.Log("hp: " + this.hp);
     }
 }
