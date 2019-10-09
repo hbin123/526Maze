@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     public ActionState state;
     Vector3 cameraOffset;
     public bool isAttack = false;
+    public int hp = 100;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -73,5 +75,16 @@ public class PlayerController : MonoBehaviour
     public void attack() {
         animator.SetTrigger("attack");
         isAttack = false;
+    }
+
+    public void resetHP()
+    {
+        this.hp = 100;
+    }
+
+    public void loseHP(int toLose)
+    {
+        this.hp -= toLose;
+        // need to do failure check
     }
 }
