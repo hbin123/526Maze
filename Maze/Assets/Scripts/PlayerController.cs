@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     CharacterController characterController;
     Animator animator;
     public float walkSpeed = 6.0F;
-    public float runSpeed = 10.0F;
+    public float runSpeed = 6.0F;
     // public float jumpSpeed = 8.0F;
     // public float gravity = 20.0F;
     public VariableJoystick joystick;
