@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    /*private void OnControllerColliderHit(ControllerColliderHit hit)
     {
 
         Debug.Log("collider name: " + hit.collider.name);
@@ -105,5 +105,5 @@ public class PlayerController : MonoBehaviour
         }
 
         Debug.Log("hp: " + this.hp);
-    }
+    }*/
 }
