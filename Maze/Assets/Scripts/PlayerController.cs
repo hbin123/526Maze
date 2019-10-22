@@ -27,29 +27,45 @@ public class PlayerController : MonoBehaviour
     public int dir = 0;
     public ActionState state;
     Vector3 cameraOffset;
+    Camera camera;
     public bool isAttack = false;
 
     public int hp = 100;
     
 
     void Start()
-    {
+    {                 
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         joystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         state = ActionState.Idle;
+        camera = GameObject.Find("FirstPersonView").GetComponent<Camera>();
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
     }
     void Update()
-    {　
+    {
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            Vector3 pos = Input.GetTouch(0).deltaPosition;
+            transform.localEulerAngles += new Vector3(0, pos.x);
+        }
+    }
+
+    void FixedUpdate() {
         // TODO: Do we really need ActionState?
         Vector3 movement = Vector3.forward * joystick.Vertical + Vector3.right * joystick.Horizontal;
-        if (isAttack) {
+        if (isAttack)
+        {
             state = ActionState.Attack;
-        } else {
-            if (movement != Vector3.zero) {
+        }
+        else
+        {
+            if (movement != Vector3.zero)
+            {
                 state = ActionState.Walk;
-            } else {
+            }
+            else
+            {
                 state = ActionState.Idle;
             }
         }
@@ -69,9 +85,23 @@ public class PlayerController : MonoBehaviour
     }
 
     void move(Vector3 movement) {
+        float rotateY = 0f;
+        if (joystick.Vertical > 0) {
+            rotateY = Mathf.Atan(joystick.Horizontal / joystick.Vertical) * 180 / Mathf.PI;
+        }else if (joystick.Vertical < 0 && joystick.Horizontal < 0)
+        {
+            rotateY = -180 + Mathf.Atan(joystick.Horizontal / joystick.Vertical) * 180 / Mathf.PI;
+        }
+        else if (joystick.Vertical < 0 && joystick.Horizontal > 0)
+        {
+            rotateY = 180 + Mathf.Atan(joystick.Horizontal / joystick.Vertical) * 180 / Mathf.PI;
+        }
+        this.transform.Rotate(0, rotateY * 1 / 180, 0);
+        characterController.SimpleMove(this.transform.forward * 5);
         animator.SetBool("isWalk", true);
-        characterController.Move(movement * runSpeed * Time.deltaTime);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
+        
+        // characterController.Move(movement * runSpeed * Time.deltaTime);
+        // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
         Camera.main.transform.position = transform.position + this.cameraOffset;
     }
 

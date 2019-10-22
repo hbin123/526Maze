@@ -24,7 +24,7 @@ public class EnemyAI : MonoBehaviour
     private NavMeshAgent agent;
     public const float DEFEND_RADIUS = 4.0f;
     public const float CHASE_RADIUS = 8.0f;
-    public const float ATTACK_RANGE = 1.0f;
+    public const float ATTACK_RANGE = 0.5f;
 
     public float runSpeed = 0.5f;
 
