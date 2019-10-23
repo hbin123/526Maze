@@ -25,7 +25,7 @@ public class BonFireTrigger : MonoBehaviour
             triggerBonFire();
         }
         //reset hp
-        player.resetHP();
+        player.resetColdHP();
 
     }
     private void OnTriggerExit(Collider other)

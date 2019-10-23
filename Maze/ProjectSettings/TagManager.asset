@@ -13,6 +13,8 @@ TagManager:
   - WallLong
   - WallLongHori
   - Zombie
+  - HPBar
+  - ManaBar
   layers:
   - Default
   - TransparentFX

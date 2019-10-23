@@ -34,6 +34,10 @@ public class PlayerController : MonoBehaviour
     Camera camera;
     Vector3 movement;
     public int hp = 100;
+    public int coldHp = 100;
+
+    HealthBarControl hpControl;
+    HealthBarControl coldControl;
     
 
     void Start()
@@ -44,7 +48,10 @@ public class PlayerController : MonoBehaviour
         state = ActionState.Idle;
         camera = GameObject.Find("FirstPersonView").GetComponent<Camera>();
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
+        hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
+        coldControl = (HealthBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
     }
+
     void Update()
     {
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
@@ -104,14 +111,39 @@ public class PlayerController : MonoBehaviour
     public void resetHP()
     {
         this.hp = 100;
+        hpControl.setValue(this.hp);
     }
 
     public void loseHP(int toLose)
     {
         this.hp -= toLose;
-        print(this.hp);
+        //print(this.hp);
+        this.hp = this.hp < 0 ? 0 : this.hp;
+        hpControl.setValue(this.hp);
+
         // need to do failure check
-        if(this.hp <= 0)
+        if (this.hp <= 0)
+        {
+            GameManager.instance.LoseGame();
+        }
+    }
+
+    public void resetColdHP()
+    {
+        this.coldHp = 100;
+        coldControl.setValue(this.coldHp);
+    }
+
+    public void loseColdHP(int toLose)
+    {
+        this.coldHp -= toLose;
+        print(this.coldHp);
+
+        this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
+        coldControl.setValue(this.coldHp);
+
+        // need to do failure check
+        if (this.coldHp <= 0)
         {
             GameManager.instance.LoseGame();
         }
