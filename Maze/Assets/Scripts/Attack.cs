@@ -21,9 +21,6 @@ public class Attack : MonoBehaviour
     }
 
     public void OnClick() {
-        // print("Attack");
-        // playerController.state = ActionState.Attack;
-        // SendMessage("Attack", "attack");
-        playerController.isAttack = true;
+        playerController.triggerAttack();
     }
 }

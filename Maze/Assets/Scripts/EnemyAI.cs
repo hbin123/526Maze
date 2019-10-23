@@ -10,7 +10,10 @@ public enum State
     CHASE,
     ATTACK,
     RETURN,
+    DIE,
 }
+// TODO:
+// 怪物的自动销毁/取消碰撞体积
 
 public class EnemyAI : MonoBehaviour
 {
@@ -24,9 +27,13 @@ public class EnemyAI : MonoBehaviour
     private NavMeshAgent agent;
     public const float DEFEND_RADIUS = 4.0f;
     public const float CHASE_RADIUS = 8.0f;
-    public const float ATTACK_RANGE = 0.5f;
+    public const float ATTACK_RANGE = 2.0f;
+    public const float ATTACK_RATE = 2.0f;
 
-    public float runSpeed = 0.5f;
+    public int health = 100;
+    private float timer = 0;
+
+    public float runSpeed = 2.0f;
 
     public float rotateSpeed = 0.1f;
     // Start is called before the first frame update
@@ -40,7 +47,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // TODO:
         // 1. Add wander state.
@@ -58,7 +65,9 @@ public class EnemyAI : MonoBehaviour
             case State.RETURN:
                 returnStart();
                 break;
-                
+            case State.DIE:
+                die();
+                break;
         }
     }
 
@@ -85,6 +94,10 @@ public class EnemyAI : MonoBehaviour
         returnBackCheck();
     }
 
+    void die() {
+        animator.SetBool("isEnemyDead", true);
+    }
+
     void playerDistanceCheck() {
         float distanceToPlayer = Vector3.Distance(player.transform.position, this.transform.position);
         if (distanceToPlayer < ATTACK_RANGE) {
@@ -100,10 +113,8 @@ public class EnemyAI : MonoBehaviour
 
         // TODO:
         // 1. debounce 
-       if (distanceToPlayer < ATTACK_RANGE) {
-            // Hit player
-            animator.SetTrigger("hit");
-            // run attack method
+       if (distanceToPlayer <= ATTACK_RANGE) {
+            attack();
         }
 
         // if enemy distance larget than chase raidus, enemy return back
@@ -117,6 +128,30 @@ public class EnemyAI : MonoBehaviour
         if (distanceToStart < 0.1f) {
             animator.SetBool("isWalking", false);
             state = State.IDLE;
+        }
+    }
+
+    private void attack() {
+        Collider[] nearByObject = Physics.OverlapSphere(transform.position, ATTACK_RANGE);
+        foreach (Collider obj in nearByObject)
+        {
+            if ("Player" == obj.gameObject.tag) {
+                // player is in the attack range
+                timer += Time.deltaTime;
+                if (timer > ATTACK_RATE) {
+                    obj.GetComponent<PlayerController>().loseHP(10);
+                    animator.SetTrigger("hit");
+                    timer = 0f;
+                }
+            }
+        }
+    }
+
+    public void loseHP(int damage) {
+        this.health -= damage;
+        print(health);
+        if (this.health <= 0) {
+            this.state = State.DIE;
         }
     }
 }

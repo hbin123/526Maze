@@ -13,14 +13,18 @@ public enum ActionState
     Idle,
     Walk,
     Attack,
+    Die,
 }
+// TODO:
+// 解决人物漂浮问题
 
 public class PlayerController : MonoBehaviour
 {
     CharacterController characterController;
     Animator animator;
     public float walkSpeed = 6.0F;
-    public float runSpeed = 6.0F;
+    public const float ATTACK_RATE = 2.0f;
+    public const float ATTACK_RANGE = 2.0f;
     // public float jumpSpeed = 8.0F;
     // public float gravity = 20.0F;
     public VariableJoystick joystick;
@@ -28,8 +32,7 @@ public class PlayerController : MonoBehaviour
     public ActionState state;
     Vector3 cameraOffset;
     Camera camera;
-    public bool isAttack = false;
-
+    Vector3 movement;
     public int hp = 100;
     
 
@@ -53,38 +56,30 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate() {
         // TODO: Do we really need ActionState?
-        Vector3 movement = Vector3.forward * joystick.Vertical + Vector3.right * joystick.Horizontal;
-        if (isAttack)
-        {
-            state = ActionState.Attack;
-        }
-        else
-        {
-            if (movement != Vector3.zero)
-            {
-                state = ActionState.Walk;
-            }
-            else
-            {
-                state = ActionState.Idle;
-            }
-        }
-
+        movement = Vector3.forward * joystick.Vertical + Vector3.right * joystick.Horizontal;
         switch (state)
         {
+            case (ActionState.Idle):
+                animator.SetBool("isWalk", false);
+                check();
+                break;
             case (ActionState.Walk):
-                move(movement);
+                move();
                 break;
             case (ActionState.Attack):
-                attack();
-                break;
-            default:
-                animator.SetBool("isWalk", false);
+                hit();
                 break;
         }
     }
 
-    void move(Vector3 movement) {
+    void check() {
+        if (movement != Vector3.zero) {
+            this.state = ActionState.Walk;
+        } else {
+            this.state = ActionState.Idle;
+        }
+    }
+    void move() {
         float rotateY = 0f;
         if (joystick.Vertical > 0) {
             rotateY = Mathf.Atan(joystick.Horizontal / joystick.Vertical) * 180 / Mathf.PI;
@@ -103,11 +98,7 @@ public class PlayerController : MonoBehaviour
         // characterController.Move(movement * runSpeed * Time.deltaTime);
         // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
         Camera.main.transform.position = transform.position + this.cameraOffset;
-    }
-
-    public void attack() {
-        animator.SetTrigger("attack");
-        isAttack = false;
+        check();
     }
 
     public void resetHP()
@@ -118,6 +109,7 @@ public class PlayerController : MonoBehaviour
     public void loseHP(int toLose)
     {
         this.hp -= toLose;
+        print(this.hp);
         // need to do failure check
         if(this.hp <= 0)
         {
@@ -125,15 +117,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    /*private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-
-        Debug.Log("collider name: " + hit.collider.name);
-        if (hit.collider.tag != "Ground")
+    private void hit() {
+        Collider[] nearByObject = Physics.OverlapSphere(transform.position, ATTACK_RANGE);
+        animator.SetTrigger("attack");
+        foreach (Collider obj in nearByObject)
         {
-            this.loseHP(30);
+            if ("Zombie" == obj.gameObject.tag)
+            {
+                obj.GetComponent<EnemyAI>().loseHP(10);
+                break; // only attack one zombie
+            }
         }
+        check();
+    }
 
-        Debug.Log("hp: " + this.hp);
-    }*/
+    public void triggerAttack() {
+        this.state = ActionState.Attack;
+    }
 }
