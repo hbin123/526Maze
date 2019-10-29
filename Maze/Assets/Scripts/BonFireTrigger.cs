@@ -6,10 +6,12 @@ public class BonFireTrigger : MonoBehaviour
 {
     public bool isTriggered = false;
     PlayerController player;
+    CountDownTimer timer;
     // Start is called before the first frame update
     void Start()
     {
         player = (PlayerController) GameObject.Find("Player").GetComponent(typeof(PlayerController));
+        timer = (CountDownTimer)GameObject.Find("Player").GetComponent(typeof(CountDownTimer));
     }
 
     // Update is called once per frame
@@ -20,6 +22,7 @@ public class BonFireTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Enter");
+        timer.stopTimer();
         if (!isTriggered)
         {// if the bonfire is not triggered, trigger it first
             triggerBonFire();
@@ -32,6 +35,7 @@ public class BonFireTrigger : MonoBehaviour
     {
         /*Debug.Log("Exit");*/
         //Once exit, we can start a timer for player to count down and lose hp
+        timer.resetTimer();
     }
     public void triggerBonFire()
     {
