@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
     public void loseColdHP(int toLose)
     {
         this.coldHp -= toLose;
-        print(this.coldHp);
+        // print(this.coldHp);
 
         this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
         coldControl.setValue(this.coldHp);
@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
             if ("Zombie" == obj.gameObject.tag)
             {
                 obj.GetComponent<EnemyAI>().loseHP(10);
-                break; // only attack one zombie
+                // break; // only attack one zombie
             }
         }
         check();
