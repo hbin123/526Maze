@@ -36,6 +36,7 @@ public class EnemyAI : MonoBehaviour
     public float runSpeed = 2.0f;
 
     public float rotateSpeed = 0.1f;
+    public AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +45,7 @@ public class EnemyAI : MonoBehaviour
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
         state = State.IDLE;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -141,6 +143,7 @@ public class EnemyAI : MonoBehaviour
                 if (timer > ATTACK_RATE) {
                     obj.GetComponent<PlayerController>().loseHP(10);
                     animator.SetTrigger("hit");
+                    audioSource.Play();
                     timer = 0f;
                 }
             }
