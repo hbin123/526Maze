@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
             if ("Zombie" == obj.gameObject.tag)
             {
                 obj.GetComponent<EnemyAI>().loseHP(10);
-                break; // only attack one zombie
+                // break; // only attack one zombie
             }
         }
         check();
