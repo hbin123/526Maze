@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
     public void loseColdHP(int toLose)
     {
         this.coldHp -= toLose;
-        print(this.coldHp);
+        // print(this.coldHp);
 
         this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
         coldControl.setValue(this.coldHp);

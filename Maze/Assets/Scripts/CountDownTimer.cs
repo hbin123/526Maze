@@ -21,7 +21,7 @@ public class CountDownTimer : MonoBehaviour
         if (counting)
         {
             currentTime += 1 * Time.deltaTime;
-            Debug.Log(currentTime);
+            // Debug.Log(currentTime);
             if(currentTime > 5f)
             {
                 player.loseColdHP(10);
