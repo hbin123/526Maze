@@ -50,6 +50,20 @@ public class PlayerController : MonoBehaviour
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
         hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
         coldControl = (HealthBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
+
+        if (GameManager.instance != null)
+        {
+            this.hp = GameManager.instance.hp;
+            this.coldHp = GameManager.instance.coldHp;
+
+            hpControl.setValue(this.hp);
+            coldControl.setValue(this.coldHp);
+
+            this.transform.position = GameManager.instance.position;
+            this.transform.rotation = GameManager.instance.rotation;
+        }
+
+        Debug.Log("Start for Player: hp " + this.hp + ", coldHp: " + this.coldHp);
     }
 
     void Update()
@@ -111,15 +125,27 @@ public class PlayerController : MonoBehaviour
     public void resetHP()
     {
         this.hp = 100;
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.hp = 100;
+        }
+
         hpControl.setValue(this.hp);
     }
 
     public void loseHP(int toLose)
     {
+        Debug.Log("loseHP: " + this.hp);
         this.hp -= toLose;
         //print(this.hp);
         this.hp = this.hp < 0 ? 0 : this.hp;
         hpControl.setValue(this.hp);
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.hp = this.hp;
+        }
 
         // need to do failure check
         if (this.hp <= 0)
@@ -131,16 +157,28 @@ public class PlayerController : MonoBehaviour
     public void resetColdHP()
     {
         this.coldHp = 100;
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.coldHp = 100;
+        }
+
         coldControl.setValue(this.coldHp);
     }
 
     public void loseColdHP(int toLose)
     {
+        Debug.Log("loseColdHP: " + this.coldHp);
         this.coldHp -= toLose;
         // print(this.coldHp);
 
         this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
         coldControl.setValue(this.coldHp);
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.coldHp = this.coldHp;
+        }
 
         // need to do failure check
         if (this.coldHp <= 0)

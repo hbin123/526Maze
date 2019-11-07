@@ -32,4 +32,9 @@ public class HealthBarControl : MonoBehaviour
         //print(value);
     }
 
+    public int getValue()
+    {
+        return (int)(this.value * MAXHP);
+    }
+
 }
