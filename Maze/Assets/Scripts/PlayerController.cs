@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
 
     HealthBarControl hpControl;
     HealthBarControl coldControl;
-    
+    FrostEffect frostEffect;
 
     void Start()
     {                 
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
         hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
         coldControl = (HealthBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
+        frostEffect = GameObject.Find("FirstPersonView").GetComponent<FrostEffect>();
 
         if (GameManager.instance != null)
         {
@@ -136,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
     public void loseHP(int toLose)
     {
-        Debug.Log("loseHP: " + this.hp);
+        //Debug.Log("loseHP: " + this.hp);
         this.hp -= toLose;
         //print(this.hp);
         this.hp = this.hp < 0 ? 0 : this.hp;
@@ -164,11 +165,13 @@ public class PlayerController : MonoBehaviour
         }
 
         coldControl.setValue(this.coldHp);
+        int stage = 9 - (this.coldHp / 10);
+        frostEffect.setFrostAmountToStage(stage);
     }
 
     public void loseColdHP(int toLose)
     {
-        Debug.Log("loseColdHP: " + this.coldHp);
+        //Debug.Log("loseColdHP: " + this.coldHp);
         this.coldHp -= toLose;
         // print(this.coldHp);
 
@@ -179,6 +182,9 @@ public class PlayerController : MonoBehaviour
         {
             GameManager.instance.coldHp = this.coldHp;
         }
+
+        int stage = 9 - (this.coldHp / 10);
+        frostEffect.setFrostAmountToStage(stage);
 
         // need to do failure check
         if (this.coldHp <= 0)
