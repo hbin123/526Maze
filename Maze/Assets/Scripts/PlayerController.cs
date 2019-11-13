@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         camera = GameObject.Find("FirstPersonView").GetComponent<Camera>();
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
         hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
-        coldControl = (ManaBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
+        coldControl = (ManaBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(ManaBarControl));
         frostEffect = GameObject.Find("FirstPersonView").GetComponent<FrostEffect>();
 
         if (GameManager.instance != null)

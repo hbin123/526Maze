@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
     public void BreakGame()
     {
         HealthBarControl hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
-        HealthBarControl coldControl = (HealthBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
+        ManaBarControl coldControl = (ManaBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(ManaBarControl));
 
         instance.hp = hpControl.getValue();
         instance.coldHp = coldControl.getValue();
