@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public int coldHp = 100;
 
     HealthBarControl hpControl;
-    HealthBarControl coldControl;
+    ManaBarControl coldControl;
     FrostEffect frostEffect;
 
     void Start()
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
         camera = GameObject.Find("FirstPersonView").GetComponent<Camera>();
         this.cameraOffset = Camera.main.transform.position - this.transform.position;
         hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
-        coldControl = (HealthBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
+        coldControl = (ManaBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(HealthBarControl));
         frostEffect = GameObject.Find("FirstPersonView").GetComponent<FrostEffect>();
 
         if (GameManager.instance != null)

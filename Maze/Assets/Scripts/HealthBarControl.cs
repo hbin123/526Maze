@@ -9,13 +9,17 @@ public class HealthBarControl : MonoBehaviour
     public float value;
 
     private Image bar;
-    private const float MAXHP = 100;
+    private const float MAXHP = 100f;
 
     // Start is called before the first frame update
     void Start()
     {
         bar = GetComponent<Image>();
-        this.value = 1f;
+        //this.value = 1f;
+        if (GameManager.instance != null)
+        {
+            setValue(GameManager.instance.hp);
+        }
     }
 
     // Update is called once per frame
