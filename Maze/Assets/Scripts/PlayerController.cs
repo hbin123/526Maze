@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 
 // Development List
 // Attack Button Improvement
@@ -70,11 +70,33 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
-        {
-            Vector3 pos = Input.GetTouch(0).deltaPosition;
-            transform.localEulerAngles += new Vector3(0, pos.x);
+        float dx = 0;
+
+        if (!EventSystem.current.IsPointerOverGameObject()) {
+                for (int i = 0; i < Input.touchCount; i++)
+                {
+                    if (Input.touches[i].position.x > 600)
+                    {
+                        print(Input.touchCount);
+                        if (Input.GetTouch(i).phase == TouchPhase.Moved)
+                        {
+                            Vector3 pos = Input.GetTouch(i).deltaPosition;
+                            dx = pos.x * 10;
+                        }
+                    }
+                }
         }
+
+        if (Input.GetMouseButton(1))
+        {
+            dx = Input.GetAxis("Mouse X") * 100;
+        }
+
+        Vector2 targetAngles = transform.eulerAngles;
+        targetAngles.y += dx;
+        transform.rotation = Quaternion.Euler(Vector2.Lerp(transform.eulerAngles, targetAngles, Time.deltaTime));
+        // transform.localEulerAngles += new Vector3(0, dx * Time.deltaTime);
+
     }
 
     void FixedUpdate() {
@@ -114,12 +136,14 @@ public class PlayerController : MonoBehaviour
         {
             rotateY = 180 + Mathf.Atan(joystick.Horizontal / joystick.Vertical) * 180 / Mathf.PI;
         }
-        this.transform.Rotate(0, rotateY * 1 / 180, 0);
+        this.transform.Rotate(0, rotateY * 3 / 180, 0);
         characterController.SimpleMove(this.transform.forward * 5);
         animator.SetBool("isWalk", true);
-        
-        // characterController.Move(movement * runSpeed * Time.deltaTime);
-        // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * 10);
+
+        // Vector3 moveDirection = new Vector3(ETCInput.GetAxis("Horizontal"), 0.0f, ETCInput.GetAxis("Vertical"));
+        // moveDirection = transform.TransformDirection(moveDirection);
+        // characterController.Move(moveDirection * walkSpeed * Time.deltaTime);
+
         Camera.main.transform.position = transform.position + this.cameraOffset;
         check();
     }
@@ -175,27 +199,27 @@ public class PlayerController : MonoBehaviour
     public void loseColdHP(int toLose)
     {
         //Debug.Log("loseColdHP: " + this.coldHp);
-        this.coldHp -= toLose;
-        // print(this.coldHp);
+        // this.coldHp -= toLose;
+        // // print(this.coldHp);
 
-        this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
-        coldControl.setValue(this.coldHp);
+        // this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
+        // coldControl.setValue(this.coldHp);
 
-        if (GameManager.instance != null)
-        {
-            GameManager.instance.coldHp = this.coldHp;
-        }
+        // if (GameManager.instance != null)
+        // {
+        //     GameManager.instance.coldHp = this.coldHp;
+        // }
 
-        int stage = 9 - (this.coldHp / 10);
-        frostEffect.setFrostAmountToStage(stage);
+        // int stage = 9 - (this.coldHp / 10);
+        // frostEffect.setFrostAmountToStage(stage);
 
-        // need to do failure check
-        if (this.coldHp <= 0)
-        {
-            this.GetComponent<AudioSource>().clip = audios[3];
-            this.GetComponent<AudioSource>().Play();
-            GameManager.instance.LoseGame();
-        }
+        // // need to do failure check
+        // if (this.coldHp <= 0)
+        // {
+        //     this.GetComponent<AudioSource>().clip = audios[3];
+        //     this.GetComponent<AudioSource>().Play();
+        //     GameManager.instance.LoseGame();
+        // }
     }
 
     private void attack() {
