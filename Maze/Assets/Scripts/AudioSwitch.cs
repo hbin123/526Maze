@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class AudioSwitch : MonoBehaviour
 {
-    //存放音频的数组
     public AudioClip[] audios;
     // Use this for initialization
     void Start()
     {
-        //默认播放第二个音频
         this.GetComponent<AudioSource>().clip = audios[1];
         this.GetComponent<AudioSource>().Play();
     }
