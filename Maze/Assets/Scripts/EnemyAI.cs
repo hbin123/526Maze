@@ -28,7 +28,7 @@ public class EnemyAI : MonoBehaviour
     public const float DEFEND_RADIUS = 4.0f;
     public const float CHASE_RADIUS = 8.0f;
     public const float ATTACK_RANGE = 2.0f;
-    public const float ATTACK_RATE = 2.0f;
+    public const float ATTACK_RATE = 4.0f;
 
     public int health = 100;
     private float timer = 0;
