@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     HealthBarControl hpControl;
     ManaBarControl coldControl;
     FrostEffect frostEffect;
+    public AudioClip[] audios;
 
     void Start()
     {                 
@@ -89,7 +90,7 @@ public class PlayerController : MonoBehaviour
                 move();
                 break;
             case (ActionState.Attack):
-                hit();
+                attack();
                 break;
         }
     }
@@ -151,6 +152,8 @@ public class PlayerController : MonoBehaviour
         // need to do failure check
         if (this.hp <= 0)
         {
+            this.GetComponent<AudioSource>().clip = audios[3];
+            this.GetComponent<AudioSource>().Play();
             GameManager.instance.LoseGame();
         }
     }
@@ -189,13 +192,18 @@ public class PlayerController : MonoBehaviour
         // need to do failure check
         if (this.coldHp <= 0)
         {
+            this.GetComponent<AudioSource>().clip = audios[3];
+            this.GetComponent<AudioSource>().Play();
             GameManager.instance.LoseGame();
         }
     }
 
-    private void hit() {
+    private void attack() {
         Collider[] nearByObject = Physics.OverlapSphere(transform.position, ATTACK_RANGE);
         animator.SetTrigger("attack");
+        Random rand = new Random();
+        this.GetComponent<AudioSource>().clip = audios[Random.Range(0, 3)];
+        this.GetComponent<AudioSource>().Play();
         foreach (Collider obj in nearByObject)
         {
             if ("Zombie" == obj.gameObject.tag)
