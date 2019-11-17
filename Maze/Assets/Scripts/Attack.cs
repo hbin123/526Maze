@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 public class Attack : MonoBehaviour
 {
-    public float timeCount;//计时器
-    public float timeCD;//技能cd
-    public Image image;//遮罩图片
-    public Text text;//计时文本
-    public Button btn;//定义出技能按钮
-    public bool isCooling;//是否是冷却状态
+    public float timeCount;
+    public float timeCD;
+    public Image image;
+    public Text text;
+    public Button btn;
+    public bool isCooling;
     public PlayerController playerController;
     // Start is called before the first frame update
     void Start()
@@ -25,10 +25,10 @@ public class Attack : MonoBehaviour
     {
         if (!isCooling)
         {
-            image.fillAmount = 1;//按下按钮式遮罩图片的fillAmount=1;
-            image.gameObject.SetActive(true);//显示遮罩图片
-            text.gameObject.SetActive(true);//显示数字文本框
-            text.text = timeCD.ToString("f1");//文本框显示的数字并保留一位小数
+            image.fillAmount = 1;
+            image.gameObject.SetActive(true);
+            text.gameObject.SetActive(true);
+            text.text = timeCD.ToString("f1");
             isCooling = true;
             timeCount = timeCD;
             playerController.triggerAttack();
@@ -39,9 +39,9 @@ public class Attack : MonoBehaviour
     {
         if (isCooling)
         {
-            timeCount -= Time.deltaTime;//计时器赋值
-            image.fillAmount = timeCount / timeCD;//遮罩图片的fillAmount赋值
-            text.text = timeCount.ToString("f1");//给文本框赋值保留一位小数
+            timeCount -= Time.deltaTime;
+            image.fillAmount = timeCount / timeCD;
+            text.text = timeCount.ToString("f1");
             if (timeCount <= 0)
             {
                 isCooling = false;
