@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
     {
         float dx = 0;
 
-        if (!EventSystem.current.IsPointerOverGameObject()) {
+        // if (!EventSystem.current.IsPointerOverGameObject()) {
                 for (int i = 0; i < Input.touchCount; i++)
                 {
                     if (Input.touches[i].position.x > 600)
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviour
                         }
                     }
                 }
-        }
+        // }
 
         if (Input.GetMouseButton(1))
         {
@@ -198,28 +198,28 @@ public class PlayerController : MonoBehaviour
 
     public void loseColdHP(int toLose)
     {
-        //Debug.Log("loseColdHP: " + this.coldHp);
-        // this.coldHp -= toLose;
-        // // print(this.coldHp);
+        Debug.Log("loseColdHP: " + this.coldHp);
+        this.coldHp -= toLose;
+        // print(this.coldHp);
 
-        // this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
-        // coldControl.setValue(this.coldHp);
+        this.coldHp = this.coldHp < 0 ? 0 : this.coldHp;
+        coldControl.setValue(this.coldHp);
 
-        // if (GameManager.instance != null)
-        // {
-        //     GameManager.instance.coldHp = this.coldHp;
-        // }
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.coldHp = this.coldHp;
+        }
 
-        // int stage = 9 - (this.coldHp / 10);
-        // frostEffect.setFrostAmountToStage(stage);
+        int stage = 9 - (this.coldHp / 10);
+        frostEffect.setFrostAmountToStage(stage);
 
-        // // need to do failure check
-        // if (this.coldHp <= 0)
-        // {
-        //     this.GetComponent<AudioSource>().clip = audios[3];
-        //     this.GetComponent<AudioSource>().Play();
-        //     GameManager.instance.LoseGame();
-        // }
+        // need to do failure check
+        if (this.coldHp <= 0)
+        {
+            this.GetComponent<AudioSource>().clip = audios[3];
+            this.GetComponent<AudioSource>().Play();
+            GameManager.instance.LoseGame();
+        }
     }
 
     private void attack() {
@@ -232,7 +232,7 @@ public class PlayerController : MonoBehaviour
         {
             if ("Zombie" == obj.gameObject.tag)
             {
-                obj.GetComponent<EnemyAI>().loseHP(10);
+                obj.GetComponent<EnemyAI>().loseHP(30);
                 // break; // only attack one zombie
             }
         }
