@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+    void Start()
+    {
+        if (GameManager.instance != null)
+        {
+            Destroy(GameObject.Find("GameManager"));
+        }
+    }
     public void Clicked()
     {
         SceneManager.LoadScene("SampleScene");

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     public GameObject win;
     public GameObject lose;
+    public GameObject setMenus;
 
     //GameObject player = null;
 
@@ -59,6 +60,10 @@ public class GameManager : MonoBehaviour
     {
         instance.lose = GameObject.Find("lose");
         instance.lose.SetActive(false);
+
+        
+        instance.setMenus = GameObject.Find("setMenu");
+        instance.setMenus.SetActive(false);
 
         Debug.Log("InitGame(),hp: " + instance.hp + ",coldHp: " + instance.coldHp);
     }
@@ -116,6 +121,37 @@ public class GameManager : MonoBehaviour
     //{
 
     //}
+    public void GoStartMenu()
+    {
+        ResumeGame();
+        SceneManager.LoadScene("StartMenu");
+    }
+
+    public void GoSetMenu()
+    {
+        if (instance.setMenus != null)
+        {
+            PauseGame();
+            instance.setMenus.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("setMenus is null");
+        }
+    }
+
+    public void CloseSetMenu()
+    {
+        if (instance.setMenus != null)
+        {
+            instance.setMenus.SetActive(false);
+            ResumeGame();
+        }
+        else
+        {
+            Debug.Log("setMenus is null");
+        }
+    }
 
     void PauseGame()
     {
