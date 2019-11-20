@@ -15,6 +15,7 @@ TagManager:
   - Zombie
   - HPBar
   - ManaBar
+  - MemoryGameManager
   layers:
   - Default
   - TransparentFX
