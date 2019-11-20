@@ -52,17 +52,18 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
 
         }
-
+        instance.lose = GameObject.Find("lose");
+        instance.setMenus = GameObject.Find("setMenu");
         InitGame();
     }
 
     void InitGame()
     {
-        instance.lose = GameObject.Find("lose");
+        //instance.lose = GameObject.Find("lose");
         instance.lose.SetActive(false);
 
-        
-        instance.setMenus = GameObject.Find("setMenu");
+
+        //instance.setMenus = GameObject.Find("setMenu");
         instance.setMenus.SetActive(false);
 
         Debug.Log("InitGame(),hp: " + instance.hp + ",coldHp: " + instance.coldHp);
