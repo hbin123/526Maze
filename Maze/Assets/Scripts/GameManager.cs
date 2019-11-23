@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     public Vector3 position;
     public Quaternion rotation;
 
+    //public BonFireTrigger[] bonfires;
+    public bool[] bonfireStates;
+
     // Use this for initialization
     void Awake()
     {
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
             instance.coldHp = 100;
             instance.position = new Vector3(-123.3f, 0f, 39.65f);
             instance.rotation = Quaternion.Euler(0f,0f,0f);
+            instance.bonfireStates = new bool[10];
             DontDestroyOnLoad(instance);
 
         }
@@ -48,6 +52,9 @@ public class GameManager : MonoBehaviour
         {
             // when scnene change happened, by default, it would create a new instance
             // destroy the new instance, keep the old one
+            recoverBonfires();
+            Debug.Log("Number of triggered bonfires after recovery: " + numOfTriggeredBonfires());
+
             Debug.Log("Awake: destroy object, hp: " + instance.hp + ", this.hp: " + this.hp);
             Destroy(this.gameObject);
 
@@ -56,6 +63,7 @@ public class GameManager : MonoBehaviour
         instance.setMenus = GameObject.Find("setMenu");
         InitGame();
     }
+
 
     void InitGame()
     {
@@ -73,10 +81,10 @@ public class GameManager : MonoBehaviour
     {
         HealthBarControl hpControl = (HealthBarControl)GameObject.FindGameObjectWithTag("HPBar").GetComponent(typeof(HealthBarControl));
         ManaBarControl coldControl = (ManaBarControl)GameObject.FindGameObjectWithTag("ManaBar").GetComponent(typeof(ManaBarControl));
-
+         
         instance.hp = hpControl.getValue();
         instance.coldHp = coldControl.getValue();
-
+        
         Debug.Log("BreakGame(),hp: " + hp + ",coldHp: " + coldHp);
         //Debug.Log("check instance: " + hpControl.getValue());
 
@@ -87,6 +95,8 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("cur position: " + player.transform.position);
 
+        recordBonfires();
+        Debug.Log("Number of triggered bonfires when break: " + numOfTriggeredBonfires());
     }
 
     public void LoseGame()
@@ -164,5 +174,42 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("ResumeGame()");
         Time.timeScale = 1;
+    }
+
+    void recordBonfires()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            string index = "Bonfire" + (i + 1);
+            BonFireTrigger cur = (BonFireTrigger)GameObject.Find(index).GetComponent(typeof(BonFireTrigger));
+            instance.bonfireStates[i] = cur.State;
+        }
+    }
+
+
+    void recoverBonfires()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            string index = "Bonfire" + (i + 1);
+            BonFireTrigger cur = (BonFireTrigger)GameObject.Find(index).GetComponent(typeof(BonFireTrigger));
+            cur.State = instance.bonfireStates[i];
+        }
+    }
+
+    //return the number of bonfires that are not triggered
+    public int numOfTriggeredBonfires()
+    {
+        int count = 0;
+        for (int i = 0; i < 10; i++)
+        {
+            string index = "Bonfire" + (i + 1);
+            BonFireTrigger cur = (BonFireTrigger)GameObject.Find(index).GetComponent(typeof(BonFireTrigger));
+            if (cur.State == true)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 }
