@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     //public BonFireTrigger[] bonfires;
     public bool[] bonfireStates;
 
+    public bool finish;
+
     // Use this for initialization
     void Awake()
     {
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
             instance.position = new Vector3(-123.3f, 0f, 39.65f);
             instance.rotation = Quaternion.Euler(0f,0f,0f);
             instance.bonfireStates = new bool[10];
+            instance.finish = false;
             DontDestroyOnLoad(instance);
 
         }

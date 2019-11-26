@@ -91,6 +91,10 @@ public class MemoryGameManager : MonoBehaviour
             if(matches == 0)
             {
                 //success
+                if (GameManager.instance != null)
+                {
+                    GameManager.instance.finish = true; // exit controller opened
+                }
                 SceneManager.LoadScene("SampleScene");
             }
         }

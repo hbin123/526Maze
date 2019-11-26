@@ -5,7 +5,7 @@ using UnityEngine;
 public class Trigger : MonoBehaviour
 {
 	private Door m_Door;
-    private bool enterCollide = false;
+    private bool enterController = false;
     private int counter;
     // Start is called before the first frame update
     void Start()
@@ -14,16 +14,21 @@ public class Trigger : MonoBehaviour
     }
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("enter: " + collider.name);
-        enterCollide = true;
-        m_Door.OpenDoorMethod();
+        if (GameManager.instance != null && GameManager.instance.finish == true)
+        {
+            Debug.Log("enter: " + collider.name);
+            m_Door.OpenDoorMethod();
+        }
+
     }
 
     void OnTriggerExit(Collider collider)
     {
-        Debug.Log("exit");
-        enterCollide = false;
-        m_Door.CloseDoorMethod();
+        if(GameManager.instance != null && GameManager.instance.finish == true)
+        {
+            Debug.Log("exit");
+            m_Door.CloseDoorMethod();
+        }
     }
     // Update is called once per frame
     void Update()
