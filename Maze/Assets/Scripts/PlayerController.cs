@@ -65,7 +65,8 @@ public class PlayerController : MonoBehaviour
             this.transform.rotation = GameManager.instance.rotation;
         }
 
-        Debug.Log("Start for Player: hp " + this.hp + ", coldHp: " + this.coldHp);
+        Debug.Log("Start for Player: hp " + this.hp + ", coldHp: " + this.coldHp + ", position: "+ this.transform.position 
+                    + "instance position: " + GameManager.instance.position);
     }
 
     void Update()

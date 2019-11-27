@@ -8,27 +8,20 @@ public class StartMemoryGame : MonoBehaviour
 
     public void OnMouseDown()
     {
-        bool ret = checkStatus();
-
-        if(ret == true)
+       
+        Debug.Log("checkStatus: "+ GameManager.instance.numOfTriggeredBonfires());
+        if(GameManager.instance.numOfTriggeredBonfires() == 10)
         {
             Debug.Log("Button Clicked. start Memory Game.");
             string goToScene = "MemoryGame";
             GameManager.instance.BreakGame();
             SceneManager.LoadScene(goToScene);
         }
-    }
-
-    public bool checkStatus()
-    {
-        int count = 0;
-        for (int i=0; i < 10; i++)
-        {   if (GameManager.instance.bonfireStates[i] == true) count++;
+        else
+        {
+            GameManager.instance.GoCheckMessage();
         }
-
-        if (count == 10)
-            return true;
-
-        return false;
     }
+
+   
 }

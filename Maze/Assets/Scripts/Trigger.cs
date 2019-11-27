@@ -27,6 +27,7 @@ public class Trigger : MonoBehaviour
         if(GameManager.instance != null && GameManager.instance.finish == true)
         {
             Debug.Log("exit");
+            GameManager.instance.GoWinMessage();
             m_Door.CloseDoorMethod();
         }
     }

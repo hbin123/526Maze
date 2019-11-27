@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour
     public GameObject win;
     public GameObject lose;
     public GameObject setMenus;
+    public GameObject winMessage;
+    public GameObject checkMessage;
+
 
     //GameObject player = null;
 
@@ -64,6 +68,8 @@ public class GameManager : MonoBehaviour
         }
         instance.lose = GameObject.Find("lose");
         instance.setMenus = GameObject.Find("setMenu");
+        instance.winMessage = GameObject.Find("winMessage");
+        instance.checkMessage = GameObject.Find("checkMessage");
         InitGame();
     }
 
@@ -76,6 +82,8 @@ public class GameManager : MonoBehaviour
 
         //instance.setMenus = GameObject.Find("setMenu");
         instance.setMenus.SetActive(false);
+        instance.winMessage.SetActive(false);
+        instance.checkMessage.SetActive(false);
 
         Debug.Log("InitGame(),hp: " + instance.hp + ",coldHp: " + instance.coldHp);
     }
@@ -167,6 +175,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     void PauseGame()
     {
         Debug.Log("PauseGame()");
@@ -214,5 +223,46 @@ public class GameManager : MonoBehaviour
             }
         }
         return count;
+    }
+
+    public void GoWinMessage()
+    {
+        if (instance.winMessage != null)
+        {
+            PauseGame();
+            instance.winMessage.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("winMessage is null");
+        }
+    }
+
+    public void GoCheckMessage()
+    {
+        if (instance.checkMessage != null)
+        {
+            PauseGame();
+            GameObject checkMsg = instance.checkMessage.transform.GetChild(0).gameObject;
+            Text checkMsgText = checkMsg.GetComponent<Text>();
+            checkMsgText.text = (10 - numOfTriggeredBonfires()) + " more bonfires left";
+            instance.checkMessage.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("checkMessage is null");
+        }
+    }
+    public void CloseCheckMessage()
+    {
+        if (instance.checkMessage != null)
+        {
+            instance.checkMessage.SetActive(false);
+            ResumeGame();
+        }
+        else
+        {
+            Debug.Log("checkMessage is null");
+        }
     }
 }
