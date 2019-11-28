@@ -184,6 +184,10 @@ public class PlayerController : MonoBehaviour
             this.GetComponent<AudioSource>().clip = audios[3];
             this.GetComponent<AudioSource>().Play();
             GameManager.instance.LoseGame();
+        } else {
+            print("hello");
+            this.GetComponent<AudioSource>().clip = audios[4];
+            this.GetComponent<AudioSource>().Play();
         }
     }
 
