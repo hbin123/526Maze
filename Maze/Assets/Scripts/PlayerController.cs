@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float dx = 0;
+        float dy = 0;
 
         // if (!EventSystem.current.IsPointerOverGameObject()) {
                 for (int i = 0; i < Input.touchCount; i++)
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
                         {
                             Vector3 pos = Input.GetTouch(i).deltaPosition;
                             dx = pos.x * 10;
+                            dy = pos.y * 10;
                         }
                     }
                 }
@@ -91,9 +93,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(1))
         {
             dx = Input.GetAxis("Mouse X") * 100;
+            dy = Input.GetAxis("Mouse Y") * 100;
         }
 
         Vector2 targetAngles = transform.eulerAngles;
+        targetAngles.x -= dy;
         targetAngles.y += dx;
         transform.rotation = Quaternion.Euler(Vector2.Lerp(transform.eulerAngles, targetAngles, Time.deltaTime));
         // transform.localEulerAngles += new Vector3(0, dx * Time.deltaTime);
