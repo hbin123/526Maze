@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     public int health = 100;
     private float timer = 0;
 
+    private float deadTime;
     public float runSpeed = 2.0f;
 
     public float rotateSpeed = 0.1f;
@@ -46,6 +47,8 @@ public class EnemyAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         state = State.IDLE;
         audioSource = GetComponent<AudioSource>();
+        deadTime = 0f;
+        
     }
 
     // Update is called once per frame
@@ -98,6 +101,11 @@ public class EnemyAI : MonoBehaviour
 
     void die() {
         animator.SetBool("isEnemyDead", true);
+        
+        // deadTime += Time.deltaTime;
+        // if (deadTime > 5) {
+        //     Destroy(this);
+        // }
     }
 
     void playerDistanceCheck() {
