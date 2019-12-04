@@ -8,6 +8,7 @@ public class CountDownTimer : MonoBehaviour
     float currentTime;
     PlayerController player;
     FrostEffect frostEffect;
+    public int difficulty = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +29,7 @@ public class CountDownTimer : MonoBehaviour
             //frostEffect.incrementFrostCount();
             if (currentTime > 5f)
             {
-                player.loseColdHP(10);
+                player.loseColdHP(5 * difficulty);
                 currentTime = 0f;
             }
 
@@ -43,6 +44,11 @@ public class CountDownTimer : MonoBehaviour
     public void stopTimer()
     {
         counting = false;
+    }
+
+    public void ChangeDifficulty(int difficulty) {
+        Debug.Log("Difficulty changed");
+        this.difficulty = difficulty;
     }
     /*public void resumeTimer()
     {
