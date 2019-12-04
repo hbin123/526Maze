@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     FrostEffect frostEffect;
     public AudioClip[] audios;
 
+    private bool isGuard = false;
+    private float guardTime = 5.0f;
+
     void Start()
     {                 
         characterController = GetComponent<CharacterController>();
@@ -102,6 +105,13 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Euler(Vector2.Lerp(transform.eulerAngles, targetAngles, Time.deltaTime));
         // transform.localEulerAngles += new Vector3(0, dx * Time.deltaTime);
 
+        if (this.isGuard) {
+            this.guardTime -= Time.deltaTime;
+            if (this.guardTime < 0) {
+                this.isGuard = false;
+                this.guardTime = 5.0f;
+            }
+        }
     }
 
     void FixedUpdate() {
@@ -167,6 +177,9 @@ public class PlayerController : MonoBehaviour
 
     public void loseHP(int toLose)
     {
+        if (this.isGuard) {
+            return;
+        }
         //Debug.Log("loseHP: " + this.hp);
         this.hp -= toLose;
         //print(this.hp);
@@ -249,6 +262,12 @@ public class PlayerController : MonoBehaviour
     }
 
     public void triggerAttack() {
+        this.isGuard = false;
         this.state = ActionState.Attack;
+    }
+
+    public void triggerGuard() {
+        Debug.Log("is guarding");
+        this.isGuard = true;
     }
 }
